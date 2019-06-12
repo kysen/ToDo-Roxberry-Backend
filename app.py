@@ -1,16 +1,14 @@
-from flask import Flask,request, jsonify
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 
 from flask_heroku import Heroku
-import os
 
 app = Flask(__name__)
 heroku = Heroku(app)
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "app.sqlite")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://wvjcrdjdfaeypf:09b8fbf2a3a127a58a6c35df7af5094f7fedc0d2a51e168154d4e46fe6f437ea@ec2-23-23-173-30.compute-1.amazonaws.com:5432/dffab9c2baefg1"
 
 CORS(app)
 
