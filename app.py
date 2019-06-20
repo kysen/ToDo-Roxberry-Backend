@@ -16,18 +16,22 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 class Todo (db.Model):
-    __tablename__="todos"
+    __tablename__="todoLists"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     done = db.Column(db.Boolean)
+    category = db.Column(db.String(100), nullable=False)
 
     def __init__(self, title, done):
         self.title = title
         self.done = done
-        
+        self.category = category
+
+
+
 class TodoSchema(ma.Schema):
     class Meta:
-        fields = ("id", "title", "done")
+        fields = ("id", "title", "done", "category")
 
 todo_schema = TodoSchema()
 todos_schema = TodoSchema(many=True)
@@ -38,8 +42,9 @@ def add_todo():
 
     title = request.json["title"]
     done = request.json["done"]
+    category = request.json["category"]
 
-    record = Todo(title, done)
+    record = Todo(title, done, category)
 
     db.session.add(record)
     db.session.commit()
@@ -55,15 +60,13 @@ def get_todos():
     result = todos_schema.dump(all_todos)
     return jsonify(result.data)
 
-@app.route("/todo/<id>", methods=["PUT"])
+@app.route("/todo/<id>", methods=["PATCH"])
 def update_todo(id):
 
     todo = Todo.query.get(id)
 
-    new_title = request.json["title"]
     new_done = request.json["done"]
 
-    todo.title = new_title
     todo.done = new_done
 
     db.session.commit()
