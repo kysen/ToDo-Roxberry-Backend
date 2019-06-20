@@ -5,10 +5,18 @@ from flask_marshmallow import Marshmallow
 
 from flask_heroku import Heroku
 
+# 
+# import os
+
+# 
+
 app = Flask(__name__)
 heroku = Heroku(app)
 
+# basedir = os.path.abspath(os.path.dirname(__file__))
+
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://usrqsnkdojrrwi:a30bb487978f0e03d3059a81160fe79e871f99378638cdcaa0900baa795034c1@ec2-174-129-27-3.compute-1.amazonaws.com:5432/dd40et8qqjcla1"
+# app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///' + os.path.join(basedir, 'app.sqlite')
 
 CORS(app)
 
@@ -19,7 +27,7 @@ class Todo (db.Model):
     __tablename__="todoLists"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    done = db.Column(db.Boolean)
+    done = db.Column(db.String(3), nullable=True)
     category = db.Column(db.String(100), nullable=False)
 
     def __init__(self, title, done, category):
