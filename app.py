@@ -22,7 +22,7 @@ class Todo (db.Model):
     done = db.Column(db.Boolean)
     category = db.Column(db.String(100), nullable=False)
 
-    def __init__(self, title, done):
+    def __init__(self, title, done, category):
         self.title = title
         self.done = done
         self.category = category
