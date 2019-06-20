@@ -15,7 +15,7 @@ heroku = Heroku(app)
 
 # basedir = os.path.abspath(os.path.dirname(__file__))
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://usrqsnkdojrrwi:a30bb487978f0e03d3059a81160fe79e871f99378638cdcaa0900baa795034c1@ec2-174-129-27-3.compute-1.amazonaws.com:5432/dd40et8qqjcla1"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://xadovgalssfyws:30e847ec6f5af082037f420f149d9e5ddf120d568955cb8bbc3b7fe17841c783@ec2-54-235-104-136.compute-1.amazonaws.com:5432/d919s2qgv5ccs6"
 # app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///' + os.path.join(basedir, 'app.sqlite')
 
 CORS(app)
