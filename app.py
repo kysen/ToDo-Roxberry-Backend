@@ -5,23 +5,66 @@ from flask_marshmallow import Marshmallow
 
 from flask_heroku import Heroku
 
-# 
-# import os
-
-# 
-
 app = Flask(__name__)
 heroku = Heroku(app)
 
-# basedir = os.path.abspath(os.path.dirname(__file__))
-
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://xadovgalssfyws:30e847ec6f5af082037f420f149d9e5ddf120d568955cb8bbc3b7fe17841c783@ec2-54-235-104-136.compute-1.amazonaws.com:5432/d919s2qgv5ccs6"
-# app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///' + os.path.join(basedir, 'app.sqlite')
 
 CORS(app)
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+
+class SaveByDate (db.Model):
+    __tablename__="SaveListDaily"
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    done = db.Column(db.String(3), nullable=True)
+    category = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.String(10), nullable=False)
+
+    def __init__(self, title, done, category, date):
+        self.title = title
+        self.done = done
+        self.category = category
+        self.date = date
+
+class DateSchema(ma.Schema):
+    class Meta:
+        fields = ("id", "title", "done", "category", "date")
+
+date_schema = DateSchema()
+dates_schema = DateSchema(many=True)
+
+@app.route("/dates", methods=["GET"])
+def get_dates():
+    all_dates = Date.query.all()
+    result = dates_schema.dump(all_dates)
+    return jsonify(result.data)
+
+@app.route("/date-add", methods=["POST"])
+def add_date():
+
+    title = request.json["title"]
+    done = request.json["done"]
+    category = request.json["category"]
+    date = request.json["date"]
+
+    record = Date(title, done, category, date)
+
+    db.session.add(record)
+    db.session.commit()
+
+    date = Date.query.get(record.id)
+
+    return date_schema.jsonify(date)
+
+# @app.route("/date/<id>", methods=["DELETE"])
+# def delete_date(id):
+#     record = Date.query.get(id)
+#     db.session.delete(record)
+#     db.session.commit()
+
 
 class Todo (db.Model):
     __tablename__="todoLists"
@@ -34,8 +77,6 @@ class Todo (db.Model):
         self.title = title
         self.done = done
         self.category = category
-
-
 
 class TodoSchema(ma.Schema):
     class Meta:
