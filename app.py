@@ -59,11 +59,11 @@ def add_date():
 
     return date_schema.jsonify(date)
 
-# @app.route("/date/<id>", methods=["DELETE"])
-# def delete_date(id):
-#     record = Date.query.get(id)
-#     db.session.delete(record)
-#     db.session.commit()
+@app.route("/date/<id>", methods=["DELETE"])
+def delete_date(id):
+    record = Date.query.get(id)
+    db.session.delete(record)
+    db.session.commit()
 
 
 class Todo (db.Model):
